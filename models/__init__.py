@@ -81,37 +81,38 @@ class User(UserMixin):
         self.cpf = cpf
 
 class Livros():
-    def __init__(self, id, nome, preco, url_imagem, categoria):
-        self.id = id
-        self.nome = nome
-        self.preco = preco
-        self.imagem = url_imagem
-
+    def __init__(self, id_livro, titulo, ISBN, Ano_publicacao, autor_id, editora_id, genero_id, quantidade_disponivel, resumo):
+        self.id = id_livro
+        self.titulo = titulo
+        self.isbn = isbn
+        self.ano = Ano_publicacao
+        self.autor_id = autor_id
+        self.editora_id = editora_id
         self.categoria = categoria
+        self.genero_id = Genero_id
+        self.quantidade = quantidade_disponivel
+        self.resumo = resumo
 
     @classmethod
-    def get(cls, user_id):
+    def get(cls, id_livro):
         conexao = obter_conexao()
-        sql = "SELECT * FROM tb_produtos WHERE pro_id = ?"
-        resultado = conexao.execute(sql, (user_id,)).fetchone()
+        sql = "SELECT * FROM Livros WHERE id_livro = ?"
+        resultado = conexao.execute(sql, (id_livro,)).fetchone()
         conexao.close()
         if resultado:
-            return Produto(id=['pro_id'], nome=['pro_nome'], preco=['pro_preco'], imagem=['pro_url_imagem'])
-            return Produto(id=['pro_id'], nome=['pro_nome'], preco=['pro_preco'], imagem=['pro_url_imagem'], categoria=['pro_categoria'])
+            return Livro(id=['ID_livro'], titulo=["Titulo"], genero_id=["Genero_id"], editora_id=["Editoa_id"], quantidade = ["Quantidade_disponivel"])
         return None
-
 
     @classmethod
     def all(cls):
         conexao = obter_conexao()
-        sql = "SELECT * FROM tb_produtos"
+        sql = "SELECT * FROM Livros"
         resultados = conexao.execute(sql, ).fetchall()
         conexao.close()
-        produtos = []
+        livros = []
         for i in resultados:
-            produto = Produto(id=i['pro_id'], nome=i['pro_nome'], preco=i['pro_preco'], url_imagem=i['pro_url_imagem'])
-            produto = Produto(id=i['pro_id'], nome=i['pro_nome'], preco=i['pro_preco'], url_imagem=i['pro_url_imagem'], categoria=i['pro_categoria'])
-            produtos.append(produto)
+            livro = Livro(id=['ID_livro'], titulo=["Titulo"], genero_id=["Genero_id"], editora_id=["Editoa_id"], quantidade = ["Quantidade_disponivel"])
+            produtos.append(livro)
         return produtos
 
     def save(self):
