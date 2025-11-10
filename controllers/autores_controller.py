@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.autores import Autor
+from models.livros import Livro
 
 autor_bp = Blueprint("autor", __name__, url_prefix="/autores")
 
@@ -32,12 +33,14 @@ def adicionar_autor():
 
 @autor_bp.route("/remover/<int:id>", methods=["POST"])
 def remover_autor(id):
-    autor = Autor.get(id)
-    if autor:
+    num_livros = Livro.verificar_livros_autor(id) #Vê qnts livros o autor tem, e se pode apagar ele
+    
+    if num_livros > 0: #Não deixa apagar o autor que tem livros
+        flash(f"Não é possível remover este autor, pois ele possui {num_livros} livros. Se quiser remover-lo, remova os livros primeiro.", "error")
+    else:
         Autor.delete(id)
         flash("Autor removido com sucesso!", "success")
-    else:
-        flash("Autor não encontrado!", "error")
+
     return redirect(url_for("autor.listar_autores"))
 
 @autor_bp.route("/editar/<int:id>", methods=["GET", "POST"])

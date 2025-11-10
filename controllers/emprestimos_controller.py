@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.emprestimo import Emprestimo
-from datetime import date
+from datetime import date, datetime
 
 from models.livros import Livro
 from models.user import Usuario
@@ -11,12 +11,6 @@ emprestimo_bp = Blueprint("emprestimo", __name__, url_prefix="/emprestimos")
 @emprestimo_bp.route("/")
 def listar_emprestimos():
     emprestimos = Emprestimo.all()
-    hoje = date.today()
-
-    #Só pra exibir isso aqui
-    for e in emprestimos:
-        if e.status == "pendente" and e.data_prevista and e.data_prevista < hoje:
-            e.status = "atrasado"
 
     return render_template("emprestimos/emprestimos.html", emprestimos=emprestimos, Usuario=Usuario, Livro=Livro)
 
@@ -87,8 +81,8 @@ def editar_emprestimo(id):
     if request.method == "POST":
         usuario_id = request.form.get("usuario_id")
         livro_id = request.form.get("livro_id")
-        data_prevista = request.form.get("data_prevista") or "Sem Dados"
-        data_real = request.form.get("data_real") or "Sem Dados"
+        data_prevista = request.form.get("data_prevista") or None
+        data_real = request.form.get("data_real") or None
         status = request.form.get("status") or "pendente"
 
         emprestimo.usuario_id = usuario_id
@@ -118,20 +112,34 @@ def devolver_emprestimo(id):
         flash("Empréstimo não encontrado!", "error")
         return redirect(url_for("emprestimo.listar_emprestimos"))
 
-    data_real = date.today().isoformat()
+    data_real = date.today()
+    prevista = emprestimo.data_prevista
 
-    # Verifica se a devolução está atrasada
-    if emprestimo.data_prevista and data_real > str(emprestimo.data_prevista):
+    if isinstance(prevista, str):
+        try:
+            prevista = datetime.strptime(prevista, '%Y-%m-%d').date()
+        except ValueError:
+            prevista = None 
+
+    status = "devolvido" 
+    
+    if prevista and data_real > prevista:
         status = "devolvido com atraso"
-    else:
-        status = "devolvido"
 
-    # Atualiza apenas data_real e status
-    emprestimo.update(data_real=data_real, status=status)
+    data_prevista_str = prevista.isoformat() if prevista else None
+    
+    emprestimo.update(
+        usuario_id=emprestimo.usuario_id,
+        livro_id=emprestimo.livro_id,
+        data_prevista=data_prevista_str, 
+        data_real=data_real.isoformat(),
+        status=status 
+    )
+    
 
-    # Aumenta a quantidade disponível do livro
     livro = Livro.get(int(emprestimo.livro_id))
     livro.quantidade += 1
+
     livro.update(
         titulo=livro.titulo,
         isbn=livro.isbn,
@@ -142,6 +150,7 @@ def devolver_emprestimo(id):
         quantidade=livro.quantidade,
         resumo=livro.resumo
     )
+
 
     flash("Devolução registrada com sucesso!", "success")
     return redirect(url_for("emprestimo.listar_emprestimos"))

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.editoras import Editora
+from models.livros import Livro
 
 editora_bp = Blueprint("editora", __name__, url_prefix="/editoras")
 
@@ -27,12 +28,14 @@ def adicionar_editora():
 
 @editora_bp.route("/remover/<int:id>", methods=["POST"])
 def remover_editora(id):
-    editora = Editora.get(id)
-    if editora:
+    num_livros = Livro.verificar_livros_editora(id) 
+    
+    if num_livros > 0:
+        flash(f"Não é possível remover esta editora, pois ela possui {num_livros} livros. Se quiser remover-la, remova os livros primeiro.", "error")
+    else:
         Editora.delete(id)
         flash("Editora removida com sucesso!", "success")
-    else:
-        flash("Editora não encontrada!", "error")
+        
     return redirect(url_for("editora.listar_editoras"))
 
 @editora_bp.route("/editar/<int:id>", methods=["GET", "POST"])

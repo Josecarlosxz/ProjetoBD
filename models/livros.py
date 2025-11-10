@@ -113,3 +113,28 @@ class Livro:
         conexao.execute(sql, {"id": id_livro})
         conexao.commit()
         conexao.close()
+
+    #FUNÇÕES QUE TRATA O ERRO DE DELETAR UM ELEMENTO QUE TEM FOREIGN KEY EM UM LIVRO
+    @classmethod
+    def verificar_livros_autor(cls, autor_id):
+        conexao = obter_sessao()
+        sql = text("SELECT COUNT(*) FROM Livros WHERE Autor_id = :autor_id")
+        resultado = conexao.execute(sql, {"autor_id": autor_id}).scalar()
+        conexao.close()
+        return resultado
+    
+    @classmethod
+    def verificar_livros_genero(cls, genero_id):
+        conexao = obter_sessao()
+        sql = text("SELECT COUNT(*) FROM Livros WHERE Genero_id = :id")
+        resultado = conexao.execute(sql, {"id": genero_id}).scalar()
+        conexao.close()
+        return resultado
+
+    @classmethod
+    def verificar_livros_editora(cls, editora_id):
+        conexao = obter_sessao()
+        sql = text("SELECT COUNT(*) FROM Livros WHERE Editora_id = :id")
+        resultado = conexao.execute(sql, {"id": editora_id}).scalar()
+        conexao.close()
+        return resultado

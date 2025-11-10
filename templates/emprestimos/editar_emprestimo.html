@@ -2,16 +2,43 @@
 {% block titulo %}Editar Empréstimo{% endblock %}
 {% block conteudo %}
 <main class="container">
-    <h1>Editar Empréstimo</h1>
-    <form class="form-box" method="POST" action="{{ url_for('emprestimos.editar_emprestimo', id=emprestimo.id) }}">
-        <label>Data de Devolução Real:</label>
-        <input type="date" name="Data_devolucao_real" value="{{ emprestimo.Data_devolucao_real }}">
+    <h1>Editar Empréstimo (ID: {{ emprestimo.id }})</h1>
+    
+    <form class="form-box" method="POST" action="{{ url_for('emprestimo.editar_emprestimo', id=emprestimo.id) }}">
+        
+        <label for="usuario_id">Usuário:</label>
+        <select name="usuario_id" id="usuario_id" required>
+            <option value="">Selecione um usuário</option>
+            {% for user in usuarios %}
+                <option value="{{ user.id }}" 
+                    {% if user.id == emprestimo.usuario_id|int %}selected{% endif %}>
+                    {{ user.nome }} (ID: {{ user.id }})
+                </option>
+            {% endfor %}
+        </select>
 
-        <label>Status:</label>
-        <select name="status" required>
+        <label for="livro_id">Livro:</label>
+        <select name="livro_id" id="livro_id" required>
+            <option value="">Selecione um livro</option>
+            {% for livro in livros %}
+                <option value="{{ livro.id }}" 
+                    {% if livro.id == emprestimo.livro_id|int %}selected{% endif %}>
+                    {{ livro.titulo }} (Disponível: {{ livro.quantidade }})
+                </option>
+            {% endfor %}
+        </select>
+        
+        <label for="data_prevista">Data de Devolução Prevista:</label>
+        <input type="date" name="data_prevista" id="data_prevista" value="{{ emprestimo.data_prevista }}">
+
+        <label for="data_real">Data de Devolução Real (Para ajustes):</label>
+        <input type="date" name="data_real" id="data_real" value="{{ emprestimo.data_real if emprestimo.data_real }}">
+        
+        <label for="status">Status (Para ajustes):</label>
+        <select name="status" id="status" required>
             <option value="pendente" {% if emprestimo.status == 'pendente' %}selected{% endif %}>Pendente</option>
             <option value="devolvido" {% if emprestimo.status == 'devolvido' %}selected{% endif %}>Devolvido</option>
-            <option value="atrasado" {% if emprestimo.status == 'atrasado' %}selected{% endif %}>Atrasado</option>
+            <option value="atrasado" {% if emprestimo.status == 'atrasado' or emprestimo.status == 'devolvido com atraso' %}selected{% endif %}>Atrasado/Devolvido c/ Atraso</option>
         </select>
 
         <button class="btn" type="submit">Salvar Alterações</button>

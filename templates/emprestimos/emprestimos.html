@@ -13,6 +13,9 @@
             <p><strong>Data Empréstimo:</strong> {{ emp.data_emprestimo }}</p>
             <p><strong>Prevista:</strong> {{ emp.data_prevista }}</p>
             <p><strong>Status:</strong> {{ emp.status }}</p>
+            {% if emp.status == 'devolvido' or emp.status == 'devolvido com atraso' %}
+                <p><strong>Data Devolução:</strong> {{ emp.data_real }}</p>
+            {% endif %}
             <a class="btn-small" href="{{ url_for('emprestimo.editar_emprestimo', id=emp.id) }}">Editar</a>
             <form action="{{ url_for('emprestimo.remover_emprestimo', id=emp.id) }}" method="POST" style="display:inline;">
                 <button class="btn-small">Remover</button>

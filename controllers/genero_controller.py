@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models.generos import Genero  
+from models.generos import Genero
+from models.livros import Livro  
 
 genero_bp = Blueprint("genero", __name__, url_prefix="/generos")
 
@@ -26,12 +27,14 @@ def adicionar_genero():
 
 @genero_bp.route("/remover/<int:id>", methods=["POST"])
 def remover_genero(id):
-    genero = Genero.get(id)
-    if genero:
-        genero.delete(id)
-        flash("Gênero removido com sucesso!", "success")
+    num_generos = Livro.verificar_livros_genero(id) #Vê qnts livros o genero tem, e se pode apagar ele
+    
+    if num_generos > 0: #Não deixa apagar o autor que tem generos
+        flash(f"Não é possível remover este gêner, pois ele possui {num_generos} livros. Se quiser remover-lo, remova os livros primeiro.", "error")
     else:
-        flash("Gênero não encontrado!", "error")
+        Genero.delete(id)
+        flash("Autor removido com sucesso!", "success")
+
     return redirect(url_for("genero.listar_generos"))
 
 @genero_bp.route("/editar/<int:id>", methods=["GET", "POST"])

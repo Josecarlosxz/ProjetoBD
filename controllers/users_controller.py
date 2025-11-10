@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+from models.emprestimo import Emprestimo
 from models.user import Usuario
 from datetime import date
 
@@ -39,12 +40,14 @@ def adicionar_usuario():
 
 @usuario_bp.route("/remover/<int:id>", methods=["POST"])
 def remover_usuario(id):
-    usuario = Usuario.get(id)
-    if usuario:
+    num_emprestimos = Emprestimo.verificar_emprestimos_usuario(id)
+    
+    if num_emprestimos > 0:
+        flash(f"Não é possível remover este usuário, pois ele possui {num_emprestimos} empréstimos. Se quiser remover-lo, remova os empréstimos primeiro.", "error")
+    else:
         Usuario.delete(id)
         flash("Usuário removido com sucesso!", "success")
-    else:
-        flash("Usuário não encontrado!", "error")
+        
     return redirect(url_for("usuario.listar_usuarios"))
 
 @usuario_bp.route("/editar/<int:id>", methods=["GET", "POST"])

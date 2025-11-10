@@ -75,36 +75,34 @@ class Emprestimo:
         conexao.close()
         return True
 
-    def update(self, data_real=None, status=None):
+    def update(self, usuario_id, livro_id, data_prevista, data_real, status):
         conexao = obter_sessao()
-        if data_real is not None and status is not None:
-            sql = text("""
-                UPDATE Emprestimos
-                SET Data_devolucao_real = :data_real, Status_emprestimo = :status
-                WHERE ID_emprestimo = :id
-            """)
-            conexao.execute(sql, {"data_real": data_real, "status": status, "id": self.id})
-            self.data_real = data_real
-            self.status = status
-        elif data_real is not None:
-            sql = text("""
-                UPDATE Emprestimos
-                SET Data_devolucao_real = :data_real
-                WHERE ID_emprestimo = :id
-            """)
-            conexao.execute(sql, {"data_real": data_real, "id": self.id})
-            self.data_real = data_real
-        elif status is not None:
-            sql = text("""
-                UPDATE Emprestimos
-                SET Status_emprestimo = :status
-                WHERE ID_emprestimo = :id
-            """)
-            conexao.execute(sql, {"status": status, "id": self.id})
-            self.status = status
-
+        sql = text("""
+            UPDATE Emprestimos
+            SET Usuario_id = :usuario_id,
+                Livro_id = :livro_id,
+                Data_devolucao_prevista = :data_prevista,
+                Data_devolucao_real = :data_real,
+                Status_emprestimo = :status
+            WHERE ID_emprestimo = :id
+        """)
+        conexao.execute(sql, {
+            "usuario_id": usuario_id,
+            "livro_id": livro_id,
+            "data_prevista": data_prevista,
+            "data_real": data_real,
+            "status": status,
+            "id": self.id
+        })
         conexao.commit()
         conexao.close()
+
+        # Atualiza os atributos do objeto em memória
+        self.usuario_id = usuario_id
+        self.livro_id = livro_id
+        self.data_prevista = data_prevista
+        self.data_real = data_real
+        self.status = status
 
     @classmethod
     def delete(cls, id_emprestimo):
@@ -128,3 +126,13 @@ class Emprestimo:
             conexao.execute(sql, {"status": self.status, "id": self.id})
             conexao.commit()
             conexao.close()
+
+    @classmethod
+    def verificar_emprestimos_usuario(cls, usuario_id):
+        conexao = obter_sessao()
+        sql = text("SELECT COUNT(*) FROM Emprestimos WHERE Usuario_id = :id")
+        
+        resultado = conexao.execute(sql, {"id": usuario_id}).scalar()
+    
+        conexao.close()
+        return resultado
