@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block titulo %}Editar Empréstimo{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Editar Empréstimo</h1>
+    <form class="form-box" method="POST" action="{{ url_for('emprestimos.editar_emprestimo', id=emprestimo.id) }}">
+        <label>Data de Devolução Real:</label>
+        <input type="date" name="Data_devolucao_real" value="{{ emprestimo.Data_devolucao_real }}">
+
+        <label>Status:</label>
+        <select name="status" required>
+            <option value="pendente" {% if emprestimo.status == 'pendente' %}selected{% endif %}>Pendente</option>
+            <option value="devolvido" {% if emprestimo.status == 'devolvido' %}selected{% endif %}>Devolvido</option>
+            <option value="atrasado" {% if emprestimo.status == 'atrasado' %}selected{% endif %}>Atrasado</option>
+        </select>
+
+        <button class="btn" type="submit">Salvar Alterações</button>
+    </form>
+</main>
+{% endblock %}

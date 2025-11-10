@@ -1,0 +1,33 @@
+main {
+    max-width: 900px;
+    margin: 15vh auto 0 auto; /* margem superior para não ficar atrás da navbar */
+    padding: 0 20px;
+    text-align: center;
+}
+
+main h1 {
+    font-size: 36px;
+    color: rgb(0, 16, 138);
+    margin-bottom: 15px;
+}
+
+main p {
+    font-size: 18px;
+    color: #333333;
+    margin-bottom: 25px;
+}
+
+main a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #dc8c00;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+main a:hover {
+    background-color: rgb(255, 150, 0);
+}

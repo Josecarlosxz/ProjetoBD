@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block titulo %}Adicionar Gênero{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Adicionar Gênero</h1>
+    <form class="form-box" method="POST" action="{{ url_for('genero.adicionar_genero') }}">
+        <label>Nome do Gênero:</label>
+        <input type="text" name="nome_genero" required>
+
+        <button class="btn" type="submit">Adicionar</button>
+    </form>
+</main>
+{% endblock %}

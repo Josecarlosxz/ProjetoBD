@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block titulo %}Usuários{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Usuários</h1>
+    <a class="btn" href="{{ url_for('usuario.adicionar_usuario') }}">Adicionar Usuário</a>
+    {% include 'mensagens.html' %}
+    <div class="box-container">
+        {% for user in usuarios %}
+        <div class="box">
+            <h2>{{ user.nome}}</h2>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Telefone:</strong> {{ user.numero }}</p>
+            <p><strong>Multa atual:</strong> R$ {{ user.multa }}</p>
+            <a class="btn-small" href="{{ url_for('usuario.adicionar_multa', id=user.id) }}">Adicionar Multa</a>
+            <a class="btn-small" href="{{ url_for('usuario.editar_usuario', id=user.id) }}">Editar</a>
+            <form action="{{ url_for('usuario.remover_usuario', id=user.id) }}" method="POST" style="display:inline;">
+                <button class="btn-small">Remover</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

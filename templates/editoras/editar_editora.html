@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block titulo %}Editar Editora{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Editar Editora</h1>
+    <form class="form-box" method="POST" action="{{ url_for('editora.editar_editora', id=editora.id) }}">
+        <label>Nome da Editora:</label>
+        <input type="text" name="nome" value="{{ editora.nome}}" required>
+
+        <label>Endereço:</label>
+        <textarea name="endereco">{{ editora.endereco }}</textarea>
+
+        <button class="btn" type="submit">Salvar Alterações</button>
+    </form>
+</main>
+{% endblock %}

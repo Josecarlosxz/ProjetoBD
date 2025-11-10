@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block titulo %}Adicionar Livro{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Adicionar Livro</h1>
+    <form class="form-box" method="POST" action="{{ url_for('livro.adicionar_livro') }}">
+        <label>Título:</label>
+        <input type="text" name="titulo" required>
+
+        <label>Autor:</label>
+        <select name="autor_id" required>
+            {% for autor in autores %}
+            <option value="{{ autor.id }}">{{ autor.nome }}</option>
+            {% endfor %}
+        </select>
+
+        <label>ISBN:</label>
+        <input type="text" name="isbn" maxlength="13" required>
+
+        <label>Ano de Publicação:</label>
+        <input type="number" name="ano_publicacao">
+
+        <label>Gênero:</label>
+        <select name="genero_id" required>
+            {% for genero in generos %}
+            <option value="{{ genero.id }}">{{ genero.nome}}</option>
+            {% endfor %}
+        </select>
+
+        <label>Editora:</label>
+        <select name="editora_id" required>
+            {% for editora in editoras %}
+            <option value="{{ editora.id }}">{{ editora.nome}}</option>
+            {% endfor %}
+        </select>
+
+        <label>Quantidade Disponível:</label>
+        <input type="number" name="quantidade_disponivel" min="0">
+
+        <label>Resumo:</label>
+        <textarea name="resumo"></textarea>
+
+        <button class="btn" type="submit">Adicionar Livro</button>
+    </form>
+</main>
+{% endblock %}

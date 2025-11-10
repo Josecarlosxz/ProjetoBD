@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block titulo %}Registrar Empréstimo{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Registrar Empréstimo</h1>
+    <form class="form-box" method="POST" action="{{ url_for('emprestimo.adicionar_emprestimo') }}">
+        <label>Usuário:</label>
+        <select name="usuario_id" required>
+            {% for usuario in usuarios %}
+            <option value="{{ usuario.id }}">{{ usuario.nome }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Livro:</label>
+        <select name="livro_id" required>
+            {% for livro in livros %}
+            <option value="{{ livro.id }}">{{ livro.titulo }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Data de Devolução Prevista:</label>
+        <input type="date" name="data_prevista" required>
+
+        <p> Data Empréstimo: {{ hoje }} </p>
+
+        <button class="btn" type="submit">Registrar</button>
+    </form>
+</main>
+{% endblock %}

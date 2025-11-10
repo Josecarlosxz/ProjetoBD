@@ -1,50 +1,19 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-Br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>{% block title %}Meu Projeto Flask{% endblock %}</title>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    {% block head_extra %}{% endblock %}
+    <title>{% block titulo %} {% endblock %} </title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'> <!-- Fonte das páginas (Não tá pegando nn sei pq)-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">  <!-- Customização padrão de todas as páginas -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}"> <!-- Customização padrão da navbar para todas as páginas -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">  <!-- Customização padrão de todas as páginas -->
+
+    {% block css %} {% endblock %}
 </head>
 <body>
-
-    <header>
-        <nav class="navbar">
-            <a href="{{ url_for('home') }}" class="logo">Meu App</a>
-            <ul>
-                <li><a href="{{ url_for('home') }}">Início</a></li>
-                <li><a href="{{ url_for('user.register') }}">Registro</a></li> 
-                <li><a href="{{ url_for('user.login') }}">Login</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flashes">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        {% block content %}
-            {% endblock content %}
-    </main>
-
-    <footer>
-        <p>&copy; {{ now().year }} Meu Projeto Flask. Todos os direitos reservados.</p>
-        {% block footer_extra %}{% endblock footer_extra %}
-    </footer>
-    
-    {% block scripts %}
-        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    {% endblock scripts %}
-
+    {% include '/includes/navbar.html'   %}
+    {% block conteudo %} 
+    {% endblock %}
 </body>
 </html>

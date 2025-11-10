@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block titulo %}Adicionar Usuário{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Adicionar Usuário</h1>
+    <form class="form-box" method="POST" action="{{ url_for('usuario.adicionar_usuario') }}">
+        <label>Nome:</label>
+        <input type="text" name="nome" required>
+
+        <label>Email:</label>
+        <input type="email" name="email">
+
+        <label>Telefone:</label>
+        <input type="text" name="numero">
+
+        <button class="btn" type="submit">Adicionar</button>
+    </form>
+</main>
+{% endblock %}

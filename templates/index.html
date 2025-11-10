@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block titulo %}
+Sistema Biblioteca - Página Inicial
+{% endblock %}
+
+{% block conteudo %}
+<main class="container">
+    {% include 'mensagens.html' %}
+    <div class="box">
+        <h1>Bem-vindo ao Sistema Biblioteca!</h1>
+        <p>Gerencie livros, autores, gêneros, editoras, usuários e empréstimos de forma simples e eficiente.</p>
+
+        <div class="botoes">
+            <a href="{{ url_for('livro.listar_livros') }}">Ver Livros</a>
+            <a href="{{ url_for('emprestimo.listar_emprestimos') }}">Ver Empréstimos</a>
+            <a href="{{ url_for('usuario.listar_usuarios') }}">Ver Usuários</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

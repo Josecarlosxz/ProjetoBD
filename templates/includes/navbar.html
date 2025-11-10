@@ -1,0 +1,12 @@
+<nav id="navbar">
+    <h1>Sistema Biblioteca</h1>
+    <div class="links">
+        <a href="{{ url_for('index') }}">INÍCIO</a>
+        <a href="{{ url_for('livro.listar_livros') }}">LIVROS</a>
+        <a href="{{ url_for('autor.listar_autores') }}">AUTORES</a>
+        <a href="{{ url_for('genero.listar_generos') }}">GÊNEROS</a>
+        <a href="{{ url_for('editora.listar_editoras') }}">EDITORAS</a>
+        <a href="{{ url_for('usuario.listar_usuarios') }}">USUÁRIOS</a>
+        <a href="{{ url_for('emprestimo.listar_emprestimos') }}">EMPRÉSTIMOS</a>
+    </div>
+</nav>

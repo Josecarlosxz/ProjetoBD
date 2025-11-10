@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block titulo %}Adicionar Multa{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Adicionar Multa para {{ usuario.nome }}</h1>
+    <form class="form-box" method="POST" action="{{ url_for('usuario.adicionar_multa', id=usuario.id) }}">
+        <label>Valor da Multa (R$):</label>
+        <input type="number" name="valor" step="0.01" required>
+        <button class="btn" type="submit">Aplicar Multa</button>
+    </form>
+</main>
+{% endblock %}

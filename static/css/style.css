@@ -1,0 +1,139 @@
+main {
+    max-width: 1000px;
+    margin: 15vh auto 5vh auto; /* Espaço abaixo da navbar */
+    padding: 0 20px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+main h1 {
+    font-size: 32px;
+    color: rgb(0, 16, 138);
+    margin-bottom: 15px;
+}
+
+main p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* ==========================
+   BOTÕES
+========================== */
+.btn {
+    display: inline-block;
+    margin: 5px 5px 15px 5px;
+    padding: 10px 20px;
+    background-color: #dc8c00;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: rgb(255, 150, 0);
+}
+
+.btn-small {
+    display: inline-block;
+    margin: 3px;
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #dc8c00;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-small:hover {
+    background-color: rgb(255, 150, 0);
+}
+
+/* ==========================
+   CONTAINERS E BOXES
+========================== */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.box {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.box h2 {
+    color: rgb(0, 16, 138);
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.box p {
+    color: #333;
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.acoes {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* ==========================
+   FORMULÁRIOS
+========================== */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 15px;
+    width: 100%;
+    max-width: 500px;
+    margin-inline: auto;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 10px;
+    color: rgb(0, 16, 138);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+button.btn, input[type="submit"].btn {
+    align-self: center;
+    margin-top: 20px;
+}

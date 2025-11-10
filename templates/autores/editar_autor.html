@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block titulo %}Editar Autor{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Editar Autor</h1>
+    <form class="form-box" method="POST" action="{{ url_for('autor.editar_autor', id=autor.id) }}">
+        <label>Nome:</label>
+        <input type="text" name="nome" value="{{ autor.nome }}" required>
+
+        <label>Nacionalidade:</label>
+        <input type="text" name="nacionalidade" value="{{ autor.nacionalidade }}">
+
+        <label>Data de Nascimento:</label>
+        <input type="date" name="data_nascimento" value="{{ autor.data_nascimento }}">
+
+        <label>Biografia:</label>
+        <textarea name="biografia">{{ autor.biografia }}</textarea>
+
+        <button type="submit" class="btn">Salvar</button>
+    </form>
+</main>
+{% endblock %}

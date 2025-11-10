@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block titulo %}Empréstimos{% endblock %}
+{% block conteudo %}
+<main class="container">
+    <h1>Empréstimos</h1>
+    <a class="btn" href="{{ url_for('emprestimo.adicionar_emprestimo') }}">Registrar Empréstimo</a>
+    {% include 'mensagens.html' %}
+    <div class="box-container">
+        {% for emp in emprestimos %}
+        <div class="box">
+            <p><strong> Usuário:</strong> {{ Usuario.get(emp.usuario_id).nome }}</p>
+            <p><strong> Livro: </strong> {{ Livro.get(emp.livro_id).titulo }} </p>
+            <p><strong>Data Empréstimo:</strong> {{ emp.data_emprestimo }}</p>
+            <p><strong>Prevista:</strong> {{ emp.data_prevista }}</p>
+            <p><strong>Status:</strong> {{ emp.status }}</p>
+            <a class="btn-small" href="{{ url_for('emprestimo.editar_emprestimo', id=emp.id) }}">Editar</a>
+            <form action="{{ url_for('emprestimo.remover_emprestimo', id=emp.id) }}" method="POST" style="display:inline;">
+                <button class="btn-small">Remover</button>
+            </form>
+
+            {% if emp.status != 'devolvido' and emp.status != 'devolvido com atraso' %}
+            <form method="POST" action="{{ url_for('emprestimo.devolver_emprestimo', id=emp.id) }}">
+                <button type="submit" class="btn">Devolver</button>
+            </form>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

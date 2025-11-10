@@ -1,0 +1,34 @@
+nav {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    height: 10vh;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    padding: 0% 3%;
+    border-bottom: 3.5px solid rgb(0, 16, 138);
+    z-index: 999;
+}
+
+nav .links {
+    display: flex;
+    width: 80%;
+    margin: 10px 0px 0px 10px;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+nav .links a {
+    font-size: 15px;
+    color: #dc8c00;
+    text-decoration: none;
+}
+
+nav .links a:hover {
+    border-bottom: 1px solid;
+}
+
+nav h1 {
+    font-size: 22px;
+    color: #dc8c00;
+}
