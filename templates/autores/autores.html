@@ -4,7 +4,7 @@
 <main>
     <div class="container">
         <h1>Autores Cadastrados</h1>
-        <a href="{{ url_for('autor.adicionar_autor') }}" class="btn">Adicionar Autor</a>
+        <a href="{{ url_for('autor.adicionar_autor') }}" class="botao">Adicionar Autor</a>
         
         {% include 'mensagens.html' %}
         
@@ -16,9 +16,9 @@
                 <p><strong>Data de nascimento:</strong> {{ autor.data_nascimento or 'Desconhecida' }}</p>
                 <p><strong> Biografia: </strong> {{ autor.biografia or "Sem dados"}} </p>
                 <div class="acoes">
-                    <a href="{{ url_for('autor.editar_autor', id=autor.id) }}" class="btn-small">Editar</a>
+                    <a href="{{ url_for('autor.editar_autor', id=autor.id) }}" class="botao-pequeno">Editar</a>
                     <form action="{{ url_for('autor.remover_autor', id=autor.id) }}" method="POST">
-                        <button type="submit" class="btn-small">Remover</button>
+                        <button type="submit" class="botao-pequeno">Remover</button>
                     </form>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 {% block conteudo %}
 <main class="container">
     <h1>Empréstimos</h1>
-    <a class="btn" href="{{ url_for('emprestimo.adicionar_emprestimo') }}">Registrar Empréstimo</a>
+    <a class="botao" href="{{ url_for('emprestimo.adicionar_emprestimo') }}">Registrar Empréstimo</a>
     {% include 'mensagens.html' %}
     <div class="box-container">
         {% for emp in emprestimos %}
@@ -16,14 +16,14 @@
             {% if emp.status == 'devolvido' or emp.status == 'devolvido com atraso' %}
                 <p><strong>Data Devolução:</strong> {{ emp.data_real }}</p>
             {% endif %}
-            <a class="btn-small" href="{{ url_for('emprestimo.editar_emprestimo', id=emp.id) }}">Editar</a>
+            <a class="botao-pequeno" href="{{ url_for('emprestimo.editar_emprestimo', id=emp.id) }}">Editar</a>
             <form action="{{ url_for('emprestimo.remover_emprestimo', id=emp.id) }}" method="POST" style="display:inline;">
-                <button class="btn-small">Remover</button>
+                <button class="botao-pequeno">Remover</button>
             </form>
 
             {% if emp.status != 'devolvido' and emp.status != 'devolvido com atraso' %}
             <form method="POST" action="{{ url_for('emprestimo.devolver_emprestimo', id=emp.id) }}">
-                <button type="submit" class="btn">Devolver</button>
+                <button type="submit" class="botao">Devolver</button>
             </form>
             {% endif %}
 

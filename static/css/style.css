@@ -1,6 +1,6 @@
 main {
     max-width: 1000px;
-    margin: 15vh auto 5vh auto; /* Espaço abaixo da navbar */
+    margin: 15vh auto 5vh auto;
     padding: 0 20px;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
@@ -21,7 +21,7 @@ main p {
 /* ==========================
    BOTÕES
 ========================== */
-.btn {
+.botao {
     display: inline-block;
     margin: 5px 5px 15px 5px;
     padding: 10px 20px;
@@ -29,14 +29,13 @@ main p {
     color: white;
     text-decoration: none;
     border-radius: 5px;
-    transition: background-color 0.3s;
 }
 
-.btn:hover {
+.botao:hover {
     background-color: rgb(255, 150, 0);
 }
 
-.btn-small {
+.botao-pequeno {
     display: inline-block;
     margin: 3px;
     padding: 6px 12px;
@@ -47,10 +46,9 @@ main p {
     border-radius: 4px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.btn-small:hover {
+.botao-pequeno:hover {
     background-color: rgb(255, 150, 0);
 }
 
@@ -77,11 +75,9 @@ main p {
     border-radius: 10px;
     padding: 20px;
     text-align: left;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .box:hover {
-    transform: translateY(-5px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -104,9 +100,6 @@ main p {
     margin-top: 10px;
 }
 
-/* ==========================
-   FORMULÁRIOS
-========================== */
 form {
     display: flex;
     flex-direction: column;
@@ -133,7 +126,7 @@ input, select, textarea {
     font-family: 'Montserrat', sans-serif;
 }
 
-button.btn, input[type="submit"].btn {
+button.botao, input[type="submit"].botao {
     align-self: center;
     margin-top: 20px;
 }

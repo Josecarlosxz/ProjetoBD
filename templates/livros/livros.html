@@ -3,7 +3,7 @@
 {% block conteudo %}
 <main class="container">
     <h1>Livros</h1>
-    <a class="btn" href="{{ url_for('livro.adicionar_livro') }}">Adicionar Livro</a>
+    <a class="botao" href="{{ url_for('livro.adicionar_livro') }}">Adicionar Livro</a>
     
     {% include 'mensagens.html' %}
 
@@ -18,9 +18,9 @@
             <p><strong>Quantidade:</strong> {{ livro.quantidade }}</p>
             <p><strong> Editora:</strong> {{ Editora.get(livro.editora_id).nome }} </p>
             <p> <strong> Resumo: </strong> {{livro.resumo}} </p>
-            <a class="btn-small" href="{{ url_for('livro.editar_livro', id=livro.id) }}">Editar</a>
+            <a class="botao-pequeno" href="{{ url_for('livro.editar_livro', id=livro.id) }}">Editar</a>
             <form action="{{ url_for('livro.remover_livro', id=livro.id) }}" method="POST" style="display:inline;">
-                <button class="btn-small">Remover</button>
+                <button class="botao-pequeno">Remover</button>
             </form>
         </div>
         {% endfor %}

@@ -3,15 +3,15 @@
 {% block conteudo %}
 <main class="container">
     <h1>Gêneros</h1>
-    <a class="btn" href="{{ url_for('genero.adicionar_genero') }}">Adicionar Gênero</a>
+    <a class="botao" href="{{ url_for('genero.adicionar_genero') }}">Adicionar Gênero</a>
     {% include 'mensagens.html' %}
     <div class="box-container">
         {% for genero in generos %}
         <div class="box">
             <h2>{{ genero.nome }}</h2>
-            <a class="btn-small" href="{{ url_for('genero.editar_genero', id=genero.id) }}">Editar</a>
+            <a class="botao-pequeno" href="{{ url_for('genero.editar_genero', id=genero.id) }}">Editar</a>
             <form action="{{ url_for('genero.remover_genero', id=genero.id) }}" method="POST" style="display:inline;">
-                <button class="btn-small">Remover</button>
+                <button class="botao-pequeno">Remover</button>
             </form>
         </div>
         {% endfor %}

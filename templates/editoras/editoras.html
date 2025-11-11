@@ -3,7 +3,7 @@
 {% block conteudo %}
 <main class="container">
     <h1>Editoras</h1>
-    <a class="btn" href="{{ url_for('editora.adicionar_editora') }}">Adicionar Editora</a>
+    <a class="botao" href="{{ url_for('editora.adicionar_editora') }}">Adicionar Editora</a>
     
     {% include 'mensagens.html' %}
     
@@ -12,9 +12,9 @@
         <div class="box">
             <h2>{{ editora.nome }}</h2>
             <p>{{ editora.endereco }}</p>
-            <a class="btn-small" href="{{ url_for('editora.editar_editora', id=editora.id) }}">Editar</a>
+            <a class="botao-pequeno" href="{{ url_for('editora.editar_editora', id=editora.id) }}">Editar</a>
             <form action="{{ url_for('editora.remover_editora', id=editora.id) }}" method="POST" style="display:inline;">
-                <button class="btn-small">Remover</button>
+                <button class="botao-pequeno">Remover</button>
             </form>
         </div>
         {% endfor %}
