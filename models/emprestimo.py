@@ -132,7 +132,17 @@ class Emprestimo:
         conexao = obter_sessao()
         sql = text("SELECT COUNT(*) FROM Emprestimos WHERE Usuario_id = :id")
         
-        resultado = conexao.execute(sql, {"id": usuario_id}).scalar()
-    
+        resultado = conexao.execute(sql, {"id": usuario_id}).fetchone()
         conexao.close()
-        return resultado
+        
+        return resultado[0] if resultado else 0
+    
+    @classmethod
+    def verificar_emprestimos_livro(cls, livro_id):
+        conexao = obter_sessao()
+        sql = text("SELECT COUNT(*) FROM Emprestimos WHERE Livro_id = :id")
+        
+        resultado = conexao.execute(sql, {"id": livro_id}).fetchone()
+        conexao.close()
+        
+        return resultado[0] if resultado else 0

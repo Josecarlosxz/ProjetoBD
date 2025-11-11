@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from models.editoras import Editora
+from models.emprestimo import Emprestimo
 from models.generos import Genero
 from models.livros import Livro
 from models.autores import Autor
@@ -49,12 +50,15 @@ def adicionar_livro():
 
 @livro_bp.route("/remover/<int:id>", methods=["POST"])
 def remover_livro(id):
+    num_emprestimos = Emprestimo.verificar_emprestimos_livro(id)
     livro = Livro.get(id)
-    if livro:
-        livro.delete(id)
-        flash("Livro removido com sucesso!", "success")
+
+    if num_emprestimos > 0:
+        flash(f"Não é possível remover o livro pois ele tem {num_emprestimos} empréstimos. Se quiser remover-lo, remova os empréstimos primeiro.", "error")
     else:
-        flash("Livro não encontrado!", "error")
+        Livro.delete(id)
+        flash(f"Livro '{livro.titulo}' removido com sucesso!", "success")
+        
     return redirect(url_for("livro.listar_livros"))
 
 @livro_bp.route("/editar/<int:id>", methods=["GET", "POST"])

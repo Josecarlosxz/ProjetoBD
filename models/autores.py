@@ -95,11 +95,3 @@ class Autor:
         conexao.execute(sql, {"id_autor": id_autor})
         conexao.commit()
         conexao.close()
-
-    @classmethod
-    def verificar_livros_autor(cls, autor_id):
-        conexao = obter_sessao()
-        sql = text("SELECT COUNT(*) FROM Livros WHERE Autor_id = :autor_id")
-        resultado = conexao.execute(sql, {"autor_id": autor_id}).scalar()
-        conexao.close()
-        return resultado
