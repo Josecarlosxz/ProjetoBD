@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.autores import Autor
 from models.livros import Livro
+from models.log_auditoria import LogAuditoria
 
 autor_bp = Blueprint("autor", __name__, url_prefix="/autores")
 
@@ -24,8 +25,13 @@ def adicionar_autor():
             data_nascimento=data_nascimento,
             biografia=biografia
         )
-        autor.save()
-        flash("Autor adicionado com sucesso!", "success")
+
+        try:
+            autor.save()
+            flash("Autor cadastrado com sucesso!", "success")
+        except Exception as e:
+            msg = str(e.orig) if hasattr(e, "orig") else str(e)
+            flash(msg, "error")
         return redirect(url_for("autor.listar_autores"))
 
     return render_template("autores/adicionar_autor.html")
@@ -61,3 +67,13 @@ def editar_autor(id):
         return redirect(url_for("autor.listar_autores"))
 
     return render_template("autores/editar_autor.html", autor=autor)
+
+@autor_bp.route("/logs")
+def logs_autores():
+    logs = LogAuditoria.listar_por_tabela("Autores")
+
+    return render_template(
+        "logs/logs.html",
+        logs=logs,
+        tabela="Autores"
+    )

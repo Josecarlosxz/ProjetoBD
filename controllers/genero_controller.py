@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.generos import Genero
 from models.livros import Livro  
+from models.log_auditoria import LogAuditoria
 
 genero_bp = Blueprint("genero", __name__, url_prefix="/generos")
 
@@ -28,19 +29,17 @@ def adicionar_genero():
 @genero_bp.route("/remover/<int:id>", methods=["POST"])
 def remover_genero(id):
     num_generos = Livro.verificar_livros_genero(id) #Vê qnts livros o genero tem, e se pode apagar ele
-    
-    if num_generos > 0: #Não deixa apagar o autor que tem generos
-        flash(f"Não é possível remover este gêner, pois ele possui {num_generos} livros. Se quiser remover-lo, remova os livros primeiro.", "error")
-    else:
+    try:
         Genero.delete(id)
         flash("Autor removido com sucesso!", "success")
-
+    except:
+        flash(f"Não é possível remover este gênero, pois ele possui {num_generos} livros. Se quiser remover-lo, remova os livros primeiro.", "error")
     return redirect(url_for("genero.listar_generos"))
 
 @genero_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_genero(id):
     genero = Genero.get(id)
-    if not genero:
+    if not genero: 
         flash("Gênero não encontrado!", "error")
         return redirect(url_for("genero.listar_generos"))
 
@@ -54,3 +53,13 @@ def editar_genero(id):
         flash("Gênero atualizado com sucesso!", "success")
         return redirect(url_for("genero.listar_generos"))
     return render_template("generos/editar_genero.html", genero=genero)
+
+@genero_bp.route("/logs")
+def logs_generos():
+    logs = LogAuditoria.listar_por_tabela("Generos")
+
+    return render_template(
+        "logs/logs.html",
+        logs=logs,
+        tabela="Gêneros"
+    )

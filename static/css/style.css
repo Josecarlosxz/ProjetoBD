@@ -130,3 +130,36 @@ button.botao, input[type="submit"].botao {
     align-self: center;
     margin-top: 20px;
 }
+
+/* ==========================
+   LOGS DE AUDITORIA
+========================== */
+
+.log-box {
+    border-left: 6px solid rgb(0, 16, 138);
+}
+
+.log-box h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #dc8c00;
+}
+
+.log-dados {
+    display: block;
+    background-color: #f0f0f0;
+    padding: 8px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #333;
+    white-space: pre-wrap;
+}
+
+.log-data {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+    text-align: right;
+}

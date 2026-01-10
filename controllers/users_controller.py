@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.emprestimo import Emprestimo
 from models.user import Usuario
+from models.log_auditoria import LogAuditoria
 from datetime import date
 
 usuario_bp = Blueprint("usuario", __name__, url_prefix="/usuarios")
@@ -21,21 +22,25 @@ def adicionar_usuario():
             flash("O nome do usuário é obrigatório!", "error")
             return redirect(url_for("usuario.adicionar_usuario"))
 
-        data_inscricao = date.today()
-        multa_atual = 0.00
-
         usuario = Usuario(
             id=None,
             nome=nome,
             email=email,
             numero=telefone,
-            data_inscricao=data_inscricao,
-            multa=multa_atual
+            data_inscricao=None,
+            multa=None
         )
-        usuario.save()
-        flash("Usuário adicionado com sucesso!", "success")
-        return redirect(url_for("usuario.listar_usuarios"))
 
+        try:
+            usuario.save()
+            flash("Usuário adicionado com sucesso!", "success")
+            return redirect(url_for("usuario.listar_usuarios"))
+
+        except Exception as e:
+            # Captura erro vindo da trigger
+            msg = str(e.orig) if hasattr(e, "orig") else str(e)
+            flash(msg, "error")
+            return redirect(url_for("usuario.adicionar_usuario"))
     return render_template("users/adicionar_usuario.html")
 
 @usuario_bp.route("/remover/<int:id>", methods=["POST"])
@@ -95,3 +100,13 @@ def adicionar_multa(id):
         return redirect(url_for("usuario.listar_usuarios"))
 
     return render_template("users/adicionar_multa.html", usuario=usuario)
+
+@usuario_bp.route("/logs")
+def logs_usuarios():
+    logs = LogAuditoria.listar_por_tabela("Usuarios")
+
+    return render_template(
+        "logs/logs.html",
+        logs=logs,
+        tabela="Usuários"
+    )

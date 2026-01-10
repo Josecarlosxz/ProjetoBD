@@ -4,6 +4,9 @@
 <main class="container">
     <h1>Gêneros</h1>
     <a class="botao" href="{{ url_for('genero.adicionar_genero') }}">Adicionar Gênero</a>
+
+    <a href="{{ url_for('genero.logs_generos') }}" class="botao"> Logs</a>
+
     {% include 'mensagens.html' %}
     <div class="box-container">
         {% for genero in generos %}

@@ -4,6 +4,8 @@ from models.emprestimo import Emprestimo
 from models.generos import Genero
 from models.livros import Livro
 from models.autores import Autor
+from models.log_auditoria import LogAuditoria
+
 
 
 livro_bp = Blueprint('livro', __name__, url_prefix='/livros')
@@ -28,7 +30,7 @@ def adicionar_livro():
         ano_publicacao = request.form.get("ano_publicacao") or None
         genero_id = request.form.get("genero_id") or None
         editora_id = request.form.get("editora_id") or None
-        quantidade = request.form.get("quantidade_disponivel") or 0
+        quantidade = request.form.get("quantidade_disponivel")
         resumo = request.form.get("resumo")
 
         livro = Livro(
@@ -42,8 +44,12 @@ def adicionar_livro():
             resumo=resumo
         )
 
-        livro.save()
-        flash("Livro adicionado com sucesso!", "success")
+        try:
+            livro.save()
+            flash("Livro adicionado com sucesso!", "success")
+        except Exception as e:
+            msg = str(e.orig) if hasattr(e, "orig") else str(e)
+            flash(msg, "error")
         return redirect(url_for("livro.listar_livros"))
 
     return render_template("livros/adicionar_livro.html", autores=autores, generos=generos, editoras=editoras)
@@ -88,3 +94,13 @@ def editar_livro(id):
         return redirect(url_for("livro.listar_livros"))
 
     return render_template("livros/editar_livro.html", livro=livro, autores=autores, editoras=editoras, generos=generos)
+
+@livro_bp.route("/logs")
+def logs_livros():
+    logs = LogAuditoria.listar_por_tabela("Livros")
+
+    return render_template(
+        "logs/logs.html",
+        logs=logs,
+        tabela="Livros"
+    )

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block titulo %}Logs - {{ tabela }}{% endblock %}
+
+{% block conteudo %}
+<main class="container">
+    <h1>Logs de Auditoria</h1>
+    <p>Tabela: <strong>{{ tabela }}</strong></p>
+
+    {% include 'mensagens.html' %}
+
+    {% if logs %}
+    <div class="box-container">
+        {% for log in logs %}
+        <div class="box log-box">
+            <h2>{{ log.Operacao | upper }}</h2>
+
+            <p><strong>ID do Log:</strong> {{ log.ID_log }}</p>
+            <p><strong>ID do Registro:</strong> {{ log.ID_registro }}</p>
+
+            <p>
+                <strong>Antes:</strong><br>
+                <span class="log-dados">
+                    {{ log.Dados_antigos or "—" }}
+                </span>
+            </p>
+
+            <p>
+                <strong>Depois:</strong><br>
+                <span class="log-dados">
+                    {{ log.Dados_novos or "—" }}
+                </span>
+            </p>
+
+            <p class="log-data">
+                {{ log.Data_operacao }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>Nenhum log encontrado.</p>
+    {% endif %}
+</main>
+{% endblock %}

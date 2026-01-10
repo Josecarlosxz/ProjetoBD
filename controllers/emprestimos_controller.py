@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.emprestimo import Emprestimo
 from datetime import date, datetime
-
+from models.log_auditoria import LogAuditoria
 from models.livros import Livro
 from models.user import Usuario
 
@@ -18,56 +18,39 @@ def listar_emprestimos():
 def adicionar_emprestimo():
     usuarios = Usuario.all()
     livros = Livro.all()
-
     hoje = date.today().isoformat()
+
     if request.method == "POST":
         usuario_id = request.form.get("usuario_id")
         livro_id = request.form.get("livro_id")
         data_prevista = request.form.get("data_prevista") or None
 
-        #Função que pega a data atual e converte pra mandar pro banco
-        data_emprestimo = hoje
-
-        #Erro se vier alguma coisa faltando no formulário
         if not usuario_id or not livro_id or not data_prevista:
             flash("Preencha todos os campos obrigatórios!", "error")
             return redirect(url_for("emprestimo.adicionar_emprestimo"))
-        
-        #Verificando se o livro tá disponível pra emprestar
-        livro = Livro.get(int(livro_id))
-        if livro.quantidade <= 0:
-            flash(f"O livro '{livro.titulo}' não está disponível no momento.", "error")
-            return redirect(url_for("emprestimo.adicionar_emprestimo"))
-
 
         emprestimo = Emprestimo(
             id=None,
             usuario_id=usuario_id,
             livro_id=livro_id,
-            data_emprestimo=data_emprestimo,
+            data_emprestimo=hoje,
             data_prevista=data_prevista,
             data_real=None,
-            status="pendente"
-        )
-        emprestimo.save()
-
-
-        #Diminuindo -1 na quantidade de livros disponíveis
-        livro.quantidade -= 1
-        livro.update(
-            titulo=livro.titulo,
-            isbn=livro.isbn,
-            ano_publicacao=livro.ano_publicacao,
-            autor_id=livro.autor_id,
-            genero_id=livro.genero_id,
-            editora_id=livro.editora_id,
-            quantidade=livro.quantidade,
-            resumo=livro.resumo
+            status=None #EXEMPLO DE GATILHO DE GERAÇÃO AUTOMÁTICA DE VALORES !!!!!!!!!  
         )
 
-        flash("Empréstimo registrado com sucesso!", "success")
+        try:
+            emprestimo.save()
+            flash("Empréstimo registrado com sucesso!", "success")
+
+        except Exception as e:
+            msg = str(e.orig) if hasattr(e, "orig") else str(e)
+            flash(msg, "error")
+
         return redirect(url_for("emprestimo.listar_emprestimos"))
-    return render_template("emprestimos/adicionar_emprestimo.html", usuarios=usuarios, livros=livros, hoje=hoje)
+
+    return render_template("emprestimos/adicionar_emprestimo.html", usuarios=usuarios,livros=livros,hoje=hoje)
+
 
 @emprestimo_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_emprestimo(id):
@@ -83,24 +66,25 @@ def editar_emprestimo(id):
         livro_id = request.form.get("livro_id")
         data_prevista = request.form.get("data_prevista") or None
         data_real = request.form.get("data_real") or None
-        status = request.form.get("status") or "pendente"
 
         emprestimo.usuario_id = usuario_id
         emprestimo.livro_id = livro_id
         emprestimo.data_prevista = data_prevista
         emprestimo.data_real = data_real
-        emprestimo.status = status
 
-        # Atualiza no banco
-        emprestimo.update(
-            usuario_id=usuario_id,
-            livro_id=livro_id,
-            data_prevista=data_prevista,
-            data_real=data_real,
-            status=status
-        )
+        try:
+            emprestimo.update(
+                usuario_id=usuario_id,
+                livro_id=livro_id,
+                data_prevista=data_prevista,
+                data_real=data_real,
+            )
+            flash("Empréstimo atualizado com sucesso!", "success")
 
-        flash("Empréstimo atualizado com sucesso!", "success")
+        except Exception as e:
+            msg = str(e.orig) if hasattr(e, "orig") else str(e)
+            flash(msg, "error")
+
         return redirect(url_for("emprestimo.listar_emprestimos"))
 
     return render_template("emprestimos/editar_emprestimo.html", emprestimo=emprestimo, usuarios=usuarios, livros=livros)
@@ -112,55 +96,43 @@ def devolver_emprestimo(id):
         flash("Empréstimo não encontrado!", "error")
         return redirect(url_for("emprestimo.listar_emprestimos"))
 
-    data_real = date.today()
-    prevista = emprestimo.data_prevista
+    try:
+        emprestimo.update(
+            usuario_id=emprestimo.usuario_id,
+            livro_id=emprestimo.livro_id,
+            data_prevista=emprestimo.data_prevista,
+            data_real=date.today().isoformat(),
+            status="devolvido"
+        )
+        flash("Devolução registrada com sucesso!", "success")
 
-    if isinstance(prevista, str):
-        try:
-            prevista = datetime.strptime(prevista, '%Y-%m-%d').date()
-        except ValueError:
-            prevista = None 
+    except Exception as e:
+        msg = str(e.orig) if hasattr(e, "orig") else str(e)
+        flash(msg, "error")
 
-    status = "devolvido" 
-    
-    if prevista and data_real > prevista:
-        status = "devolvido com atraso"
-
-    data_prevista_str = prevista.isoformat() if prevista else None
-    
-    emprestimo.update(
-        usuario_id=emprestimo.usuario_id,
-        livro_id=emprestimo.livro_id,
-        data_prevista=data_prevista_str, 
-        data_real=data_real.isoformat(),
-        status=status 
-    )
-    
-
-    livro = Livro.get(int(emprestimo.livro_id))
-    livro.quantidade += 1
-
-    livro.update(
-        titulo=livro.titulo,
-        isbn=livro.isbn,
-        ano_publicacao=livro.ano_publicacao,
-        autor_id=livro.autor_id,
-        genero_id=livro.genero_id,
-        editora_id=livro.editora_id,
-        quantidade=livro.quantidade,
-        resumo=livro.resumo
-    )
-
-
-    flash("Devolução registrada com sucesso!", "success")
     return redirect(url_for("emprestimo.listar_emprestimos"))
+
 
 @emprestimo_bp.route("/remover/<int:id>", methods=["POST"])
 def remover_emprestimo(id):
     emprestimo = Emprestimo.get(id)
     if emprestimo:
-        Emprestimo.delete(id)
-        flash("Empréstimo removido com sucesso!", "success")
+        try:
+            Emprestimo.delete(id)
+            flash("Empréstimo removido com sucesso!", "success")
+        except Exception as e:
+            msg = str(e.orig) if hasattr(e, "orig") else str(e)
+            flash(msg, "error")
     else:
         flash("Empréstimo não encontrado!", "error")
     return redirect(url_for("emprestimo.listar_emprestimos"))
+
+@emprestimo_bp.route("/logs")
+def logs_emprestimos():
+    logs = LogAuditoria.listar_por_tabela("Emprestimos")
+
+    return render_template(
+        "logs/logs.html",
+        logs=logs,
+        tabela="Empréstimos"
+    )

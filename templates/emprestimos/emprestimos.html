@@ -4,6 +4,9 @@
 <main class="container">
     <h1>Empréstimos</h1>
     <a class="botao" href="{{ url_for('emprestimo.adicionar_emprestimo') }}">Registrar Empréstimo</a>
+
+    <a href="{{ url_for('emprestimo.logs_emprestimos') }}" class="botao"> Logs</a>
+
     {% include 'mensagens.html' %}
     <div class="box-container">
         {% for emp in emprestimos %}

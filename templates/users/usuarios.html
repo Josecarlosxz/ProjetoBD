@@ -4,6 +4,9 @@
 <main class="container">
     <h1>Usuários</h1>
     <a class="botao" href="{{ url_for('usuario.adicionar_usuario') }}">Adicionar Usuário</a>
+
+    <a href="{{ url_for('usuario.logs_usuarios') }}" class="botao"> Logs </a>
+
     {% include 'mensagens.html' %}
     <div class="box-container">
         {% for user in usuarios %}
@@ -12,6 +15,7 @@
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Telefone:</strong> {{ user.numero }}</p>
             <p><strong>Multa atual:</strong> R$ {{ user.multa }}</p>
+            <p><strong> Data de Inscrição: {{user.data_inscricao }} </strong></p>
             <a class="botao-pequeno" href="{{ url_for('usuario.adicionar_multa', id=user.id) }}">Adicionar Multa</a>
             <a class="botao-pequeno" href="{{ url_for('usuario.editar_usuario', id=user.id) }}">Editar</a>
             <form action="{{ url_for('usuario.remover_usuario', id=user.id) }}" method="POST" style="display:inline;">

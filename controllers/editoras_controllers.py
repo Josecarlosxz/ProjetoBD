@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.editoras import Editora
 from models.livros import Livro
+from models.log_auditoria import LogAuditoria
 
 editora_bp = Blueprint("editora", __name__, url_prefix="/editoras")
 
@@ -54,3 +55,13 @@ def editar_editora(id):
         return redirect(url_for("editora.listar_editoras"))
 
     return render_template("editoras/editar_editora.html", editora=editora)
+
+@editora_bp.route("/logs")
+def logs_editoras():
+    logs = LogAuditoria.listar_por_tabela("Editoras")
+
+    return render_template(
+        "logs/logs.html",
+        logs=logs,
+        tabela="Editoras"
+    )

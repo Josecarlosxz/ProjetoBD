@@ -4,7 +4,9 @@
 <main class="container">
     <h1>Editoras</h1>
     <a class="botao" href="{{ url_for('editora.adicionar_editora') }}">Adicionar Editora</a>
-    
+
+    <a href="{{ url_for('editora.logs_editoras') }}" class="botao"> Logs</a>
+
     {% include 'mensagens.html' %}
     
     <div class="box-container">

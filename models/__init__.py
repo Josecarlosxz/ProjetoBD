@@ -4,3 +4,4 @@ from .emprestimo import Emprestimo
 from .editoras import Editora
 from .generos import Genero
 from .livros import Livro
+from .log_auditoria import LogAuditoria
