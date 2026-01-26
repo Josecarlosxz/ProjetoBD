@@ -40,7 +40,7 @@ def adicionar_usuario():
             # Captura erro vindo da trigger
             msg = str(e.orig) if hasattr(e, "orig") else str(e)
             flash(msg, "error")
-            return redirect(url_for("usuario.adicionar_usuario"))
+            return redirect(url_for("usuario.listar_usuarios"))
     return render_template("users/adicionar_usuario.html")
 
 @usuario_bp.route("/remover/<int:id>", methods=["POST"])
@@ -73,8 +73,14 @@ def editar_usuario(id):
         except ValueError:
             multa_atual = 0.0
 
-        usuario.update(nome, email, telefone, multa_atual)
-        flash("Usuário atualizado com sucesso!", "success")
+        try:
+            usuario.update(nome, email, telefone, multa_atual)
+            flash("Usuário atualizado com sucesso!", "success")
+
+        except Exception as e:
+            mensagem = e.orig.args[1]
+            flash(mensagem, "error")
+
         return redirect(url_for("usuario.listar_usuarios"))
 
     return render_template("users/editar_usuario.html", usuario=usuario)
@@ -88,6 +94,7 @@ def adicionar_multa(id):
 
     if request.method == "POST":
         valor = request.form.get("valor")
+        
         try:
             valor = float(valor)
         except ValueError:
@@ -95,8 +102,15 @@ def adicionar_multa(id):
             return redirect(url_for("usuario.adicionar_multa", id=id))
 
         nova_multa = float(usuario.multa or 0) + valor
-        usuario.update(usuario.nome, usuario.email, usuario.numero, nova_multa)
-        flash(f"Multa de R${valor:.2f} adicionada com sucesso!", "success")
+
+        try:
+            usuario.update(usuario.nome, usuario.email, usuario.numero, nova_multa)
+            flash(f"Multa de R${valor:.2f} adicionada com sucesso!", "success")
+
+        except Exception as e:
+            mensagem = e.orig.args[1]
+            flash(mensagem, "error")
+
         return redirect(url_for("usuario.listar_usuarios"))
 
     return render_template("users/adicionar_multa.html", usuario=usuario)

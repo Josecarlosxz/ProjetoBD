@@ -66,11 +66,13 @@ def editar_emprestimo(id):
         livro_id = request.form.get("livro_id")
         data_prevista = request.form.get("data_prevista") or None
         data_real = request.form.get("data_real") or None
+        status = request.form.get("status")
 
         emprestimo.usuario_id = usuario_id
         emprestimo.livro_id = livro_id
         emprestimo.data_prevista = data_prevista
         emprestimo.data_real = data_real
+        emprestimo.status = status
 
         try:
             emprestimo.update(
@@ -78,6 +80,7 @@ def editar_emprestimo(id):
                 livro_id=livro_id,
                 data_prevista=data_prevista,
                 data_real=data_real,
+                status=status
             )
             flash("Empréstimo atualizado com sucesso!", "success")
 
