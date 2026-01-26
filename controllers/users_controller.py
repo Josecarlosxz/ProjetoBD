@@ -94,7 +94,7 @@ def adicionar_multa(id):
             flash("Valor inválido!", "error")
             return redirect(url_for("usuario.adicionar_multa", id=id))
 
-        nova_multa = (usuario.multa or 0) + valor
+        nova_multa = float(usuario.multa or 0) + valor
         usuario.update(usuario.nome, usuario.email, usuario.numero, nova_multa)
         flash(f"Multa de R${valor:.2f} adicionada com sucesso!", "success")
         return redirect(url_for("usuario.listar_usuarios"))
